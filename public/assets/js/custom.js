@@ -4,7 +4,7 @@ $.ajaxSetup({
 });
 
 //Style Checkbox
-    $(".checkbox-style").bootstrapSwitch();
+   // $(".checkbox-style").bootstrapSwitch();
 //WAIT BUTTON
 let waitBtn = "<i class='fa fa-spin fa-cog'> </i> Please Wait.....";
 
@@ -190,7 +190,7 @@ let notify= (type,msg) => {
     });
 
     //Editable Text
-    $(".editable").editable();
+   // $(".editable").editable();
 
     //User Registration
     /* Show apartment Id for tenant registration */
@@ -695,4 +695,48 @@ function handleFiles(e) {
     // this is to read the file
     reader.readAsDataURL(file);
 }
+function locateMe() {
+
+  const status = document.querySelector('#status');
+  const mapLink = document.querySelector('#map-link');
+
+  mapLink.href = '';
+  mapLink.textContent = '';
+
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    status.textContent = '';
+    mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+    mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+
+    
+           if (latitude) {
+               $(".coordinates").html(`
+                  <div class="col-md-12">
+                    <label>Longitude</label>
+                    <input type="text" name="longitude" class="form-control" readonly value=${longitude}  required>
+                    <label>Latitude</label>
+                    <input type="text" name="latitude" class="form-control" readonly value=${latitude}  required>
+                  </div>
+            `).removeClass("hidden");
+           } else {
+               $(".coordinates").html(``).addClass("hidden");
+           }
+  }
+
+  function error() {
+    status.textContent = 'Unable to retrieve your location';
+  }
+
+  if (!navigator.geolocation) {
+    status.textContent = 'Geolocation is not supported by your browser';
+  } else {
+    status.textContent = 'Locating…';
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+}
+document.querySelector('#get-coordinate').addEventListener('click', locateMe);
 

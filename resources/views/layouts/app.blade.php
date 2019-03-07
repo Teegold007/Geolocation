@@ -29,7 +29,7 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'Geoloc8') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -81,5 +81,64 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.js') }}"></script>
+<script src="{{ asset('assets/js/custom.js') }}"></script>
+<script src="{{ asset('assets/js/lobibox.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap-switch.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap-tagsinput.js') }}"></script>
+<script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/bootstrap3-editable/js/bootstrap-editable.min.js') }}"></script>
+<script type="text/javascript">
+     $(document).ready(function(){
+    function locateMe() {
+
+  //const status = document.querySelector('#status');
+  //const mapLink = document.querySelector('#map-link');
+
+  //mapLink.href = '';
+  //mapLink.textContent = '';
+
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    console.log(navigator.geolocation);
+
+    //status.textContent = '';
+   // mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+    //mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+
+    
+           if (latitude) {
+               $(".coordinates").html(`
+                  <div class="col-md-12">
+                    <label>Longitude</label>
+                    <input type="text" name="longitude" class="form-control" readonly value=${longitude}  required>
+                    <label>Latitude</label>
+                    <input type="text" name="latitude" class="form-control" readonly value=${latitude}  required>
+                  </div>
+            `).removeClass("hidden");
+           } else {
+               $(".coordinates").html(``).addClass("hidden");
+           }
+  }
+
+  function error() {
+    status.textContent = 'Unable to retrieve your location';
+  }
+
+  if (!navigator.geolocation) {
+    status.textContent = 'Geolocation is not supported by your browser';
+  } else {
+    
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+}
+document.querySelector('#get-coordinate').addEventListener('click', locateMe);
+});
+
+    </script>
 </body>
 </html>
